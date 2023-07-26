@@ -19,6 +19,7 @@ package gitlab
 import (
 	"fmt"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -281,7 +282,10 @@ func (s *ProjectsService) GetProject(pid interface{}, options ...OptionFunc) (*P
 	if err != nil {
 		return nil, nil, err
 	}
-	u := fmt.Sprintf("projects/%s", url.QueryEscape(project))
+	queryEscaped := url.QueryEscape(project)
+	// replace dot to %2E
+	escapedProject := strings.Replace(queryEscaped, ".", "%2E", -1)
+	u := fmt.Sprintf("projects/%s", escapedProject)
 
 	req, err := s.client.NewRequest("GET", u, nil, options)
 	if err != nil {
@@ -599,7 +603,10 @@ func (s *ProjectsService) ListProjectMembers(pid interface{}, opt *ListProjectMe
 	if err != nil {
 		return nil, nil, err
 	}
-	u := fmt.Sprintf("projects/%s/members", url.QueryEscape(project))
+	queryEscaped := url.QueryEscape(project)
+	// replace dot to %2E
+	escapedProject := strings.Replace(queryEscaped, ".", "%2E", -1)
+	u := fmt.Sprintf("projects/%s/members", escapedProject)
 
 	req, err := s.client.NewRequest("GET", u, opt, options)
 	if err != nil {
@@ -766,7 +773,10 @@ func (s *ProjectsService) ListProjectHooks(pid interface{}, opt *ListProjectHook
 	if err != nil {
 		return nil, nil, err
 	}
-	u := fmt.Sprintf("projects/%s/hooks", url.QueryEscape(project))
+	queryEscaped := url.QueryEscape(project)
+	// replace dot to %2E
+	escapedProject := strings.Replace(queryEscaped, ".", "%2E", -1)
+	u := fmt.Sprintf("projects/%s/hooks", escapedProject)
 
 	req, err := s.client.NewRequest("GET", u, opt, options)
 	if err != nil {

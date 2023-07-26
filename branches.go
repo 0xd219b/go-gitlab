@@ -19,6 +19,7 @@ package gitlab
 import (
 	"fmt"
 	"net/url"
+	"strings"
 )
 
 // BranchesService handles communication with the branch related methods
@@ -65,7 +66,10 @@ func (s *BranchesService) ListBranches(pid interface{}, opts *ListBranchesOption
 	if err != nil {
 		return nil, nil, err
 	}
-	u := fmt.Sprintf("projects/%s/repository/branches", url.QueryEscape(project))
+	queryEscaped := url.QueryEscape(project)
+	// replace dot to %2E
+	escapedProject := strings.Replace(queryEscaped, ".", "%2E", -1)
+	u := fmt.Sprintf("projects/%s/repository/branches", escapedProject)
 
 	req, err := s.client.NewRequest("GET", u, opts, options)
 	if err != nil {
