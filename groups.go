@@ -19,6 +19,7 @@ package gitlab
 import (
 	"fmt"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -271,7 +272,10 @@ func (s *GroupsService) ListGroupMembers(gid interface{}, opt *ListGroupMembersO
 	if err != nil {
 		return nil, nil, err
 	}
-	u := fmt.Sprintf("groups/%s/members", url.QueryEscape(group))
+	queryEscaped := url.QueryEscape(group)
+	// replace dot to %2E
+	escapedGroup := strings.Replace(queryEscaped, ".", "%2E", -1)
+	u := fmt.Sprintf("groups/%s/members", url.QueryEscape(escapedGroup))
 
 	req, err := s.client.NewRequest("GET", u, opt, options)
 	if err != nil {
